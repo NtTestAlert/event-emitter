@@ -1,6 +1,5 @@
-import { SetMetadata } from '@nestjs/common';
-import { EVENT_LISTENER_METADATA } from '../constants';
 import { OnEventOptions } from '../interfaces';
+import { OnEvents } from './on-events.decorator';
 
 /**
  * `@OnEvent` decorator metadata
@@ -17,13 +16,17 @@ export interface OnEventMetadata {
 }
 
 /**
+ * `@OnEvent` decorator event type
+ */
+export type OnEventType = string | symbol | Array<string | symbol>;
+
+/**
  * Event listener decorator.
  * Subscribes to events based on the specified name(s).
  *
- * @param name event to subscribe to
+ * @param event event to subscribe to
  */
 export const OnEvent = (
-  event: string | symbol | Array<string | symbol>,
+  event: OnEventType,
   options?: OnEventOptions,
-): MethodDecorator =>
-  SetMetadata(EVENT_LISTENER_METADATA, { event, options } as OnEventMetadata);
+): MethodDecorator => OnEvents([event], options);
